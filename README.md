@@ -8,11 +8,20 @@ Install pgAdmin4. Create a Database named test with the password: test123 TODO: 
 
 ### Python Requirements
 We are running python 3.9.1
-First of you have to install all the necessary requirements via this command: ```pip install -r requirements.txt```
+First of you have to install all the necessary requirements via this command: 
+```
+pip install -r requirements.txt
+```
 
 ### Init DB
-Open a Terminal and run: ```python models.py``` to create the corresponding database Table.
+Open a Terminal and run: 
+```
+python models.py
+``` to create the corresponding database Table.
 
 ### Start the application
 Make sure you have finished all previouse steps successfully.
-Open a Terminal and run: ```python app.py``` 
+Open a Terminal and run: 
+```
+python app.py
+``` 

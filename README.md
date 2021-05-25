@@ -17,7 +17,8 @@ pip install -r requirements.txt
 Open a Terminal and run: 
 ```
 python models.py
-``` to create the corresponding database Table.
+``` 
+to create the corresponding database Table.
 
 ### Start the application
 Make sure you have finished all previouse steps successfully.

@@ -22,9 +22,6 @@ public class MainController {
     @Autowired
     BigQueryService bigQueryService;
 
-    @Autowired
-    private QueryBuilder queryBuilder;
-
     @GetMapping("/getGoogle")
     private String getGoogle() throws Exception {
         List<Technologie> techlist = bigQueryService.exampleQuery();
@@ -38,11 +35,6 @@ public class MainController {
     @GetMapping("/test")
     private void test() {
         System.out.println("Hello World!");
-    }
-
-    @GetMapping("/testQuery")
-    private void test1() {
-        queryBuilder.getVulnerabilitiesInPeriodForCountryQuery("2016_05", "2016_05", "de");
     }
 
     @GetMapping("/testCountryQuery")

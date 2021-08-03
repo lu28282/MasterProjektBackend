@@ -38,7 +38,8 @@ public class BigQueryService {
 
     public BigQueryService(@Value("${google.api.key.location}") final String filePath) throws IOException {
         ServiceAccountCredentials credentials;
-        File credentialsPath = new File("D://Projekte//Master-projekt//key.json");
+        File credentialsPath = new File(filePath);
+        // File credentialsPath = new File("D://Projekte//Master-projekt//key.json");
 
         try (FileInputStream serviceAccountStream = new FileInputStream(credentialsPath)) {
             credentials = ServiceAccountCredentials.fromStream(serviceAccountStream);
@@ -84,10 +85,11 @@ public class BigQueryService {
                 countryCode);
 
         Map<YearMonth, List<Technologie>> technologiesForEachMonth = executeAndProcessQueryPeriodForCountry(querys);
-        // Bis hierhin getTechnologiesInPeriodForCountry danach AmountInPeriodFprCountry
+        // Bis hierhin getTechnologiesInPeriodForCountry danach AmountInPeriodForCountry
+        // TODO: Vertesten sobald NVD angebunden ist und der erste Query komplett durch ist.
 
-        for (var entry : technologiesForEachMonth.entrySet()) {
-            amountOfVulnerabilitesPerMonth.put(entry.getKey(), entry.getValue().size());
+        for (var monthEntry : technologiesForEachMonth.entrySet()) {
+            amountOfVulnerabilitesPerMonth.put(monthEntry.getKey(), monthEntry.getValue().size());
         }
 
         return amountOfVulnerabilitesPerMonth;
@@ -97,9 +99,9 @@ public class BigQueryService {
             throws JobException, InterruptedException {
         Map<YearMonth, List<Technologie>> technologiesForEachMonth = new HashMap<YearMonth, List<Technologie>>();
 
-        for (var entry : querys.entrySet()) {
-            technologiesForEachMonth.put(entry.getKey(),
-                    tableResultToTechnologieList(executeSingleQuery(entry.getValue())));
+        for (var monthEntry : querys.entrySet()) {
+            technologiesForEachMonth.put(monthEntry.getKey(),
+                    tableResultToTechnologieList(executeSingleQuery(monthEntry.getValue())));
         }
 
         return technologiesForEachMonth;

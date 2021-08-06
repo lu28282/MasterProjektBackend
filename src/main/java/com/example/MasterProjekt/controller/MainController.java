@@ -6,7 +6,6 @@ import java.util.Map;
 
 import com.example.MasterProjekt.pojo.Technologie;
 import com.example.MasterProjekt.service.BigQueryService;
-import com.example.MasterProjekt.util.QueryBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

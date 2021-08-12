@@ -10,14 +10,22 @@ import lombok.Data;
 @Data
 @Entity
 public class Cpe {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    String cpe23Uri;
+    private String cpe23Uri;
 
-    String versionStartIncluding;
+    private String software;
 
-    String versionEndIncluding;
+    private String version;
+
+    private String versionStartIncluding;
+
+    private String versionEndIncluding;
+
+    private String versionStartExcluding;
+
+    private String versionEndExcluding;
 }

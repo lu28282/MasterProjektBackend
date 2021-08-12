@@ -8,10 +8,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CpeDTO {
-    
-    String cpe23Uri;
 
-    String versionStartIncluding;
+    private long id;
 
-    String versionEndIncluding;
+    private String cpe23Uri;
+
+    private String software;
+
+    private String version;
+
+    private String versionStartIncluding;
+
+    private String versionEndIncluding;
 }

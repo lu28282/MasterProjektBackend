@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import com.example.MasterProjekt.util.NvdJsonParser;
 
@@ -19,19 +21,12 @@ public class NvdController {
     NvdJsonParser nvdJsonParser;
 
     @GetMapping("/parseNVDToDatabase")
-    public void test2() {
+    public void test2() throws InterruptedException {
         File jsonDirectory = new File(
                 "D:\\Projekte\\Master-projekt\\MasterProjektBackend\\src\\main\\resources\\nvDJsons");
         File[] jsonDirListing = jsonDirectory.listFiles();
-        int amountOfFiles = 1;
-        System.out.println("Start parsing");
         for (File json : jsonDirListing) {
-            nvdJsonParser.parseNvdJson(json.toPath().toString().replace("\\", "\\\\"));
-            System.out.println("File " + amountOfFiles + " complete of " + jsonDirListing.length  + " total files" );
-            amountOfFiles++;
+            nvdJsonParser.parseNvdJson(json.toPath().toString().replace("\\", "\\\\"), jsonDirListing.length);
         }
-        System.out.println("Done");
-
-        // nvdJsonParser.parseNvdJson("D:\\Projekte\\Master-projekt\\MasterProjektBackend\\src\\main\\resources\\nvDJsons\\nvdcve-1.1-2003.json");
     }
 }

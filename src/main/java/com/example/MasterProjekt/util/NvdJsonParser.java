@@ -23,21 +23,29 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
 
 @Component
+@EnableAsync
 public class NvdJsonParser {
 
     private VulnerabilityRepository vulnerabilityRepository;
 
+    private int numberOfJsonFilesCompleted;
+
     @Autowired
     public NvdJsonParser(VulnerabilityRepository vulnerabilityRepository) {
         this.vulnerabilityRepository = vulnerabilityRepository;
+        this.numberOfJsonFilesCompleted = 0;
     }
 
-    public void parseNvdJson(String pathToJson) {
+    @Async
+    public void parseNvdJson(String pathToJson, int totalNumberOfJsonFiles) throws InterruptedException {
         ObjectMapper mapper = new ObjectMapper();
         File file = Paths.get(pathToJson).toFile();
+        System.out.println("Start parsing: " + file);
         try {
             JsonNode root = mapper.readTree(file);
             JsonNode CVE_Items = root.get("CVE_Items");
@@ -45,9 +53,13 @@ public class NvdJsonParser {
 
             items.forEachRemaining(cve -> filterCVE(cve));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            System.out.println("Json could not be parsed");
             e.printStackTrace();
         }
+        System.out.println("Complete parsing: " + file);
+        numberOfJsonFilesCompleted++;
+        System.out.println(
+                "Finished " + numberOfJsonFilesCompleted + " of " + totalNumberOfJsonFiles + " files in total!");
     }
 
     private boolean cveToVulnerabilityToDatabase(String id, List<String> problemtypeList, Set<Cpe> cpeSet,

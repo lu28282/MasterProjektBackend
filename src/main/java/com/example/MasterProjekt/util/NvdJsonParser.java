@@ -184,7 +184,6 @@ public class NvdJsonParser {
             Double impactScore = baseMetricV2Node.get("impactScore").asDouble();
             baseMetricV2.setImpactScore(impactScore);
         } catch (NullPointerException ex) {
-            System.out.println("No Impact Score found");
         }
 
         try {
@@ -192,7 +191,6 @@ public class NvdJsonParser {
             Double exploitabilityScore = baseMetricV2Node.get("exploitabilityScore").asDouble();
             baseMetricV2.setExploitabilityScore(exploitabilityScore);
         } catch (NullPointerException ex) {
-            System.out.println("No Exploitation Score found");
         }
         return baseMetricV2;
     }
@@ -204,7 +202,6 @@ public class NvdJsonParser {
             Double impactScore = baseMetricV3Node.get("impactScore").asDouble();
             baseMetricV3.setImpactScore(impactScore);
         } catch (NullPointerException ex) {
-            System.out.println("No Impact Score found");
         }
 
         try {
@@ -212,7 +209,6 @@ public class NvdJsonParser {
             Double exploitabilityScore = baseMetricV3Node.get("exploitabilityScore").asDouble();
             baseMetricV3.setExploitabilityScore(exploitabilityScore);
         } catch (NullPointerException ex) {
-            System.out.println("No Exploitation Score found");
         }
         return baseMetricV3;
     }

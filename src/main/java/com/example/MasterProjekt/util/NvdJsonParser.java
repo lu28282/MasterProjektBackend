@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
+import com.example.MasterProjekt.dao.VulnerabilityRepository;
 import com.example.MasterProjekt.model.BaseMetricV2;
 import com.example.MasterProjekt.model.BaseMetricV3;
 import com.example.MasterProjekt.model.Cpe;
 import com.example.MasterProjekt.model.Vulnerability;
-import com.example.MasterProjekt.repository.VulnerabilityRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

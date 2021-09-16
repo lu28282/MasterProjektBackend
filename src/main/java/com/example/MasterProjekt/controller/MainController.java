@@ -4,7 +4,7 @@ import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
 
-import com.example.MasterProjekt.pojo.Technologie;
+import com.example.MasterProjekt.pojo.BigQueryTechnologie;
 import com.example.MasterProjekt.service.BigQueryService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class MainController {
 
     @GetMapping("/getGoogle")
     private String getGoogle() throws Exception {
-        List<Technologie> techlist = bigQueryService.exampleQuery();
+        List<BigQueryTechnologie> techlist = bigQueryService.exampleQuery();
         techlist.stream().forEach(tech -> System.out.println(tech.toString()));
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();

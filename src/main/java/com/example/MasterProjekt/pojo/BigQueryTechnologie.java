@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.NonNull;
 
 @Data
-public class Technologie {
+public class BigQueryTechnologie {
     @NonNull
     private String url;
 

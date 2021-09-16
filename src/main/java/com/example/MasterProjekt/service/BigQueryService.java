@@ -8,10 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.UUID;
 
-import com.example.MasterProjekt.pojo.BigQueryTechnologie;
+import com.example.MasterProjekt.pojo.Technologie;
 import com.example.MasterProjekt.util.QueryBuilder;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.bigquery.BigQuery;
@@ -49,7 +48,7 @@ public class BigQueryService {
                 .build().getService();
     }
 
-    public List<BigQueryTechnologie> exampleQuery() throws InterruptedException {
+    public List<Technologie> exampleQuery() throws InterruptedException {
         QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(
                 "SELECT * FROM `httparchive.technologies.2016_01_01_desktop` where url like '%.com/' AND info != '' limit 10")
                 .setUseLegacySql(false).build();
@@ -76,28 +75,21 @@ public class BigQueryService {
         return tableResultToTechnologieList(tableResult);
     }
 
-    public Map<YearMonth, Integer> getTechnologiesInPeriodForCountry(String startDate, String endDate,
+    public Map<YearMonth, List<Technologie>> getTechnologiesInPeriodForCountry(String startDate, String endDate,
             String countryCode) throws JobException, InterruptedException {
-        // Month, Amount
-        Map<YearMonth, Integer> amountOfVulnerabilitesPerMonth = new TreeMap<YearMonth, Integer>();
 
         Map<YearMonth, String> querys = queryBuilder.getVulnerabilitiesInPeriodForCountryQuery(startDate, endDate,
                 countryCode);
 
-        Map<YearMonth, List<BigQueryTechnologie>> technologiesForEachMonth = executeAndProcessQueryPeriodForCountry(querys);
-        // Bis hierhin getTechnologiesInPeriodForCountry danach AmountInPeriodForCountry
-        // TODO: Vertesten sobald NVD angebunden ist und der erste Query komplett durch ist.
+        Map<YearMonth, List<Technologie>> technologiesForEachMonth = executeAndProcessQueryPeriodForCountry(
+                querys);
 
-        for (var monthEntry : technologiesForEachMonth.entrySet()) {
-            amountOfVulnerabilitesPerMonth.put(monthEntry.getKey(), monthEntry.getValue().size());
-        }
-
-        return amountOfVulnerabilitesPerMonth;
+        return technologiesForEachMonth;
     }
 
-    private Map<YearMonth, List<BigQueryTechnologie>> executeAndProcessQueryPeriodForCountry(Map<YearMonth, String> querys)
-            throws JobException, InterruptedException {
-        Map<YearMonth, List<BigQueryTechnologie>> technologiesForEachMonth = new HashMap<YearMonth, List<BigQueryTechnologie>>();
+    private Map<YearMonth, List<Technologie>> executeAndProcessQueryPeriodForCountry(
+            Map<YearMonth, String> querys) throws JobException, InterruptedException {
+        Map<YearMonth, List<Technologie>> technologiesForEachMonth = new HashMap<YearMonth, List<Technologie>>();
 
         for (var monthEntry : querys.entrySet()) {
             technologiesForEachMonth.put(monthEntry.getKey(),
@@ -130,12 +122,12 @@ public class BigQueryService {
         return queryJob.getQueryResults();
     }
 
-    private List<BigQueryTechnologie> tableResultToTechnologieList(TableResult result) {
-        List<BigQueryTechnologie> techlist = new ArrayList<BigQueryTechnologie>();
+    private List<Technologie> tableResultToTechnologieList(TableResult result) {
+        List<Technologie> techlist = new ArrayList<Technologie>();
 
         Iterable<FieldValueList> fieldValueList = result.getValues();
         for (FieldValueList fieldValue : fieldValueList) {
-            BigQueryTechnologie techToBeAdded = new BigQueryTechnologie(fieldValue.get(0).getStringValue(),
+            Technologie techToBeAdded = new Technologie(fieldValue.get(0).getStringValue(),
                     fieldValue.get(1).getStringValue(), fieldValue.get(2).getStringValue(),
                     fieldValue.get(3).getStringValue());
             techlist.add(techToBeAdded);

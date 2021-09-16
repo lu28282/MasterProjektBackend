@@ -2,9 +2,11 @@ package com.example.MasterProjekt.pojo;
 
 import lombok.Data;
 import lombok.NonNull;
+import java.util.List;
+import com.example.MasterProjekt.model.Vulnerability;
 
 @Data
-public class BigQueryTechnologie {
+public class Technologie {
     @NonNull
     private String url;
 
@@ -16,4 +18,6 @@ public class BigQueryTechnologie {
 
     @NonNull
     private String version;
+
+    private List<Vulnerability> vulnerabilities;
 }

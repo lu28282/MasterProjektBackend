@@ -20,4 +20,8 @@ public class CpeDTO {
     private String versionStartIncluding;
 
     private String versionEndIncluding;
+
+    private String versionStartExcluding;
+
+    private String versionEndExcluding;
 }

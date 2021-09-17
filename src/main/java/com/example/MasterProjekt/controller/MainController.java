@@ -48,7 +48,7 @@ public class MainController {
     @GetMapping("/test25")
     private void test1() {
         List<Vulnerability> findCpeBySoftware = vulnerabilityRepository
-                .findCpeBySoftware("application_and_content_networking_software");
+                .findVulBySoftware("application_and_content_networking_software");
         // List<Vulnerability> findCpeBySoftware =
         // vulnerabilityRepository.findCpeBySoftware();
         

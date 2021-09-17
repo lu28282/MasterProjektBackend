@@ -13,7 +13,6 @@ import com.google.cloud.bigquery.JobException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class MainService {
 
@@ -39,19 +38,18 @@ public class MainService {
             List<Technologie> technologies = entry.getValue();
             System.out.println("Technologie size: " + technologies.size());
             List<Technologie> technologiesWithVulnerabilites = new ArrayList<Technologie>();
-            int index = 0;
-            for (Technologie technologie : technologies) {
-                System.out.println("Inside Technologies: " + index);
+
+            int techsize = technologies.size();
+            for (int i = 0; i < techsize; i++) {
+                System.out.println("Iteration: " + i + " of " + techsize + " for technologie");
+                Technologie tech = technologies.get(i);
                 List<Vulnerability> vulnerabilities = vulnerabilityService
-                        .getAllVulnerabilitiesBySoftwareAndVersion(technologie.getApp(), technologie.getVersion());
-                System.out.println("After getAllVulnerabilites " + index);
-                technologie.setVulnerabilities(vulnerabilities);
-                System.out.println("Set Vulnerabilities " + index);
+                        .getAllVulnerabilitiesBySoftwareAndVersion(tech.getApp(), tech.getVersion());
 
                 if (vulnerabilities.size() > 0) {
-                    technologiesWithVulnerabilites.add(technologie);
+                    tech.setVulnerabilities(vulnerabilities);
+                    technologiesWithVulnerabilites.add(tech);
                 }
-                index++;
             }
 
             technologiesWithVulnerabilitiesInPeriodForCountry.put(entry.getKey(), technologiesWithVulnerabilites);

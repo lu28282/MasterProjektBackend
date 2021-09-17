@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.MasterProjekt.model.Vulnerability;
-import com.example.MasterProjekt.repository.VulnerabilityRepository;
 import com.example.MasterProjekt.service.MainService;
 import com.google.cloud.bigquery.JobException;
 
@@ -17,15 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MainController {
 
+    MainService mainService;
+
     @Autowired
-    VulnerabilityRepository vulnerabilityRepository;
-
-    // MainService mainService;
-
-    // @Autowired
-    // public MainController(MainService mainService) {
-    // this.mainService = mainService;
-    // }
+    public MainController(MainService mainService) {
+        this.mainService = mainService;
+    }
 
     // @Autowired
     // BigQueryService bigQueryService;
@@ -45,27 +41,10 @@ public class MainController {
         System.out.println("Hello World!");
     }
 
-    @GetMapping("/test25")
-    private void test1() {
-        List<Vulnerability> findCpeBySoftware = vulnerabilityRepository
-                .findVulBySoftware("application_and_content_networking_software");
-        // List<Vulnerability> findCpeBySoftware =
-        // vulnerabilityRepository.findCpeBySoftware();
-        
-        for (Vulnerability vul : findCpeBySoftware) {
-            System.out.println("============================");
-            System.out.println(vul);
-        }
-        System.out.println(findCpeBySoftware.size());
+    @GetMapping("/test1")
+    private Map<YearMonth, Integer> getAllVulnerabilitesInPeriodForCountry() throws JobException, InterruptedException {
+        return mainService.getAmountOfAllVulnerabilitiesForCountryCodeAndIntervall("2016_01", "2016_01", "com");
     }
-
-    // @GetMapping("/test1")
-    // private Map<YearMonth, Integer> getAllVulnerabilitesInPeriodForCountry()
-    // throws JobException, InterruptedException {
-    // return
-    // mainService.getAmountOfAllVulnerabilitiesForCountryCodeAndIntervall("2016_01",
-    // "2016_01", "com");
-    // }
 
     // @GetMapping("/testCountryQuery")
     // private void test2() throws JobException, InterruptedException {

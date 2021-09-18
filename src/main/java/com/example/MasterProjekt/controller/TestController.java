@@ -41,10 +41,10 @@ public class TestController {
     @GetMapping("/testRepo/{software}")
     public void testIfRepositoryMethodWorksAsIntended(@PathVariable("software") String software) {
         // Repo test start
-        long startTimeRepo = System.currentTimeMillis();
-        List<Vulnerability> vulContainingSoftwareUsingRepo = vulnerabilityRepository.findVulBySoftware(software);
-        long endTimeRepo = System.currentTimeMillis();
-        long totalTimeRepo = endTimeRepo - startTimeRepo;
+        // long startTimeRepo = System.currentTimeMillis();
+        // List<Vulnerability> vulContainingSoftwareUsingRepo = vulnerabilityRepository.findVulBySoftware(software);
+        // long endTimeRepo = System.currentTimeMillis();
+        // long totalTimeRepo = endTimeRepo - startTimeRepo;
         // Repo test end
 
         // Java test start
@@ -67,16 +67,16 @@ public class TestController {
         // Java test end
 
         // Documentation / Results
-        System.out.println("Given Software is ========== " + software + " ==========");
-        System.out.println("Repo List Size: " + vulContainingSoftwareUsingRepo.size() + " ------ " + "Java List Size: "
-                + vulContainingSoftwareUsingJava.size());
+        // System.out.println("Given Software is ========== " + software + " ==========");
+        // System.out.println("Repo List Size: " + vulContainingSoftwareUsingRepo.size() + " ------ " + "Java List Size: "
+        //         + vulContainingSoftwareUsingJava.size());
 
-        vulContainingSoftwareUsingRepo.removeAll(vulContainingSoftwareUsingJava);
-        System.out.println("This should return an empty array: " + vulContainingSoftwareUsingRepo);
+        // vulContainingSoftwareUsingRepo.removeAll(vulContainingSoftwareUsingJava);
+        // System.out.println("This should return an empty array: " + vulContainingSoftwareUsingRepo);
 
-        System.out.println("A Query takes " + totalTimeRepo + " miliseconds, compared to Java Method taking "
-                + totalTimeJava + " miliseconds.");
-        System.out.println("Which mean the Java Method takes " + totalTimeJava / totalTimeRepo + " times longer");
+        // System.out.println("A Query takes " + totalTimeRepo + " miliseconds, compared to Java Method taking "
+        //         + totalTimeJava + " miliseconds.");
+        // System.out.println("Which mean the Java Method takes " + totalTimeJava / totalTimeRepo + " times longer");
     }
 
 }

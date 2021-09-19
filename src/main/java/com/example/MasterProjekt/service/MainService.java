@@ -2,9 +2,12 @@ package com.example.MasterProjekt.service;
 
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.example.MasterProjekt.model.Vulnerability;
 import com.example.MasterProjekt.pojo.Technologie;
@@ -31,33 +34,30 @@ public class MainService {
         Map<YearMonth, List<Technologie>> technologiesInPeriodForCountry = bigQueryService
                 .getTechnologiesInPeriodForCountry(startDate, endDate, countryCode);
         System.out.println("BigQueryPart finished");
-        Map<YearMonth, List<Technologie>> technologiesWithVulnerabilitiesInPeriodForCountry = new HashMap<YearMonth, List<Technologie>>();
+        // Map<YearMonth, List<Technologie>>
+        // technologiesWithVulnerabilitiesInPeriodForCountry = new HashMap<YearMonth,
+        // List<Technologie>>();
 
-        for (var entry : technologiesInPeriodForCountry.entrySet()) {
-            System.out.println("Monat: " + entry.getKey());
-            List<Technologie> technologies = entry.getValue();
-            System.out.println("Technologie size: " + technologies.size());
-            List<Technologie> technologiesWithVulnerabilites = new ArrayList<Technologie>();
+        Set<String> allSoftwares = new HashSet<String>();
 
-            int techsize = technologies.size();
-            for (int i = 0; i < techsize; i++) {
-                System.out.println("Iteration: " + i + " of " + techsize + " for technologie");
-                Technologie tech = technologies.get(i);
-                List<Vulnerability> vulnerabilities = vulnerabilityService
-                        .getAllVulnerabilitiesBySoftwareAndVersion(tech.getApp(), tech.getVersion());
-
-                if (vulnerabilities.size() > 0) {
-                    tech.setVulnerabilities(vulnerabilities);
-                    technologiesWithVulnerabilites.add(tech);
-                }
+        for (List<Technologie> techlist : technologiesInPeriodForCountry.values()) {
+            for (Technologie tech : techlist) {
+                allSoftwares.add(tech.getApp());
             }
-
-            technologiesWithVulnerabilitiesInPeriodForCountry.put(entry.getKey(), technologiesWithVulnerabilites);
         }
 
-        System.out.println("Durch mit getAllVuls");
-        System.out.println(technologiesWithVulnerabilitiesInPeriodForCountry);
-        return technologiesWithVulnerabilitiesInPeriodForCountry;
+        List<Vulnerability> allVulnerabilitiesForEverySoftware = vulnerabilityService
+                .getAllVulnerabilitiesForSoftwareSet(allSoftwares);
+
+        Map<YearMonth, List<Technologie>> techsWithVulnerabilitiesInPeriodForCountry = new HashMap<YearMonth, List<Technologie>>();
+        for (var entry : technologiesInPeriodForCountry.entrySet()) {
+            List<Technologie> techsWithVuls = vulnerabilityService
+                    .setVulnerabilityForTechnologieIfPresent(entry.getValue(), allVulnerabilitiesForEverySoftware);
+
+            techsWithVulnerabilitiesInPeriodForCountry.put(entry.getKey(), techsWithVuls);
+        }
+
+        return techsWithVulnerabilitiesInPeriodForCountry;
     }
 
     public Map<YearMonth, Integer> getAmountOfAllVulnerabilitiesForCountryCodeAndIntervall(String startDate,

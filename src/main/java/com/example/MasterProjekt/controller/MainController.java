@@ -43,7 +43,7 @@ public class MainController {
 
     @GetMapping("/test1")
     private Map<YearMonth, Integer> getAllVulnerabilitesInPeriodForCountry() throws JobException, InterruptedException {
-        return mainService.getAmountOfAllVulnerabilitiesForCountryCodeAndIntervall("2016_01", "2018_04", "com");
+        return mainService.getAmountOfAllVulnerabilitiesForCountryCodeAndIntervall("2016_01", "2016_01", "com");
     }
 
     // @GetMapping("/testCountryQuery")

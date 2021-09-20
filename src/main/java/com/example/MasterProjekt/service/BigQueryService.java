@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.example.MasterProjekt.pojo.SoftwareAndVersion;
 import com.example.MasterProjekt.pojo.Technologie;
 import com.example.MasterProjekt.util.QueryBuilder;
 import com.google.auth.oauth2.ServiceAccountCredentials;
@@ -81,14 +82,13 @@ public class BigQueryService {
         Map<YearMonth, String> querys = queryBuilder.getVulnerabilitiesInPeriodForCountryQuery(startDate, endDate,
                 countryCode);
 
-        Map<YearMonth, List<Technologie>> technologiesForEachMonth = executeAndProcessQueryPeriodForCountry(
-                querys);
+        Map<YearMonth, List<Technologie>> technologiesForEachMonth = executeAndProcessQueryPeriodForCountry(querys);
 
         return technologiesForEachMonth;
     }
 
-    private Map<YearMonth, List<Technologie>> executeAndProcessQueryPeriodForCountry(
-            Map<YearMonth, String> querys) throws JobException, InterruptedException {
+    private Map<YearMonth, List<Technologie>> executeAndProcessQueryPeriodForCountry(Map<YearMonth, String> querys)
+            throws JobException, InterruptedException {
         Map<YearMonth, List<Technologie>> technologiesForEachMonth = new HashMap<YearMonth, List<Technologie>>();
 
         for (var monthEntry : querys.entrySet()) {
@@ -127,9 +127,10 @@ public class BigQueryService {
 
         Iterable<FieldValueList> fieldValueList = result.getValues();
         for (FieldValueList fieldValue : fieldValueList) {
-            Technologie techToBeAdded = new Technologie(fieldValue.get(0).getStringValue(),
-                    fieldValue.get(1).getStringValue(), fieldValue.get(2).getStringValue(),
+            SoftwareAndVersion softwareAndVersion = new SoftwareAndVersion(fieldValue.get(2).getStringValue(),
                     fieldValue.get(3).getStringValue());
+            Technologie techToBeAdded = new Technologie(fieldValue.get(0).getStringValue(),
+                    fieldValue.get(1).getStringValue(), softwareAndVersion);
             techlist.add(techToBeAdded);
         }
 

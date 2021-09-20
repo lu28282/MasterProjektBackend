@@ -31,10 +31,14 @@ public class MainService {
 
     public Map<YearMonth, List<Technologie>> getAllVulnerabilitiesForCountryCodeAndIntervall(String startDate,
             String endDate, String countryCode) throws JobException, InterruptedException {
+        long startTimeBQ = System.currentTimeMillis();
         Map<YearMonth, List<Technologie>> technologiesInPeriodForCountry = bigQueryService
                 .getTechnologiesInPeriodForCountry(startDate, endDate, countryCode);
         System.out.println("BigQueryPart finished");
+        long endTimeBQ = System.currentTimeMillis();
+        System.out.println("Big Query query took: " + (endTimeBQ - startTimeBQ) / 60000 + " mins.");
 
+        long startTimeProcessing = System.currentTimeMillis();
         Set<SoftwareAndVersion> allSoftwaresAndVersions = new HashSet<SoftwareAndVersion>();
         Set<String> allSoftwares = new HashSet<String>();
 
@@ -81,31 +85,17 @@ public class MainService {
 
         }
 
+        long endTimeProcessing = System.currentTimeMillis();
+
+        System.out.println("Processing took: " + (endTimeProcessing - startTimeProcessing) / 1000 + " secs.");
+
         return vulnearbleTechnologiesInPeriodForCountry;
-
-        // List<Vulnerability> allVulnerabilitiesForEverySoftware = vulnerabilityService
-        // .getAllVulnerabilitiesForSoftwareSet(allSoftwares);
-
-        // Map<YearMonth, List<Technologie>> techsWithVulnerabilitiesInPeriodForCountry
-        // = new HashMap<YearMonth, List<Technologie>>();
-        // for (var entry : technologiesInPeriodForCountry.entrySet()) {
-        // List<Technologie> techsWithVuls = vulnerabilityService
-        // .setVulnerabilityForTechnologieIfPresent(entry.getValue(),
-        // allVulnerabilitiesForEverySoftware);
-
-        // techsWithVulnerabilitiesInPeriodForCountry.put(entry.getKey(),
-        // techsWithVuls);
-        // }
-
-        // return techsWithVulnerabilitiesInPeriodForCountry;
     }
 
     public Map<YearMonth, Integer> getAmountOfAllVulnerabilitiesForCountryCodeAndIntervall(String startDate,
             String endDate, String countryCode) throws JobException, InterruptedException {
         long startTime = System.currentTimeMillis();
 
-        // Map<YearMonth, List<Technologie>> technologiesWithVulnerabilitiesInPeriodForCountry = getAllVulnerabilitiesForCountryCodeAndIntervall(
-        //         startDate, endDate, countryCode);
         Map<YearMonth, List<Technologie>> technologiesWithVulnerabilitiesInPeriodForCountry = getAllVulnerabilitiesForCountryCodeAndIntervall(
                 startDate, endDate, countryCode);
         Map<YearMonth, Integer> amountOftechnologiesWithVulnerabilitiesInPeriodForCountry = new HashMap<YearMonth, Integer>();
@@ -120,7 +110,7 @@ public class MainService {
 
         long endTime = System.currentTimeMillis();
 
-        System.out.println("Processing the data takes: " + (endTime - startTime) / 60000 + " mins.");
+        System.out.println("The whole process took: " + (endTime - startTime) / 60000 + " mins.");
 
         return amountOftechnologiesWithVulnerabilitiesInPeriodForCountry;
     }

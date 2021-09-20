@@ -34,15 +34,12 @@ public class MainService {
         Map<YearMonth, List<Technologie>> technologiesInPeriodForCountry = bigQueryService
                 .getTechnologiesInPeriodForCountry(startDate, endDate, countryCode);
         System.out.println("BigQueryPart finished");
-        // Map<YearMonth, List<Technologie>>
-        // technologiesWithVulnerabilitiesInPeriodForCountry = new HashMap<YearMonth,
-        // List<Technologie>>();
 
         Set<String> allSoftwares = new HashSet<String>();
 
         for (List<Technologie> techlist : technologiesInPeriodForCountry.values()) {
             for (Technologie tech : techlist) {
-                allSoftwares.add(tech.getApp());
+                allSoftwares.add(tech.getApp().toLowerCase());
             }
         }
 
@@ -62,6 +59,8 @@ public class MainService {
 
     public Map<YearMonth, Integer> getAmountOfAllVulnerabilitiesForCountryCodeAndIntervall(String startDate,
             String endDate, String countryCode) throws JobException, InterruptedException {
+        long startTime = System.currentTimeMillis();
+
         Map<YearMonth, List<Technologie>> technologiesWithVulnerabilitiesInPeriodForCountry = getAllVulnerabilitiesForCountryCodeAndIntervall(
                 startDate, endDate, countryCode);
         Map<YearMonth, Integer> amountOftechnologiesWithVulnerabilitiesInPeriodForCountry = new HashMap<YearMonth, Integer>();
@@ -73,6 +72,10 @@ public class MainService {
             amountOftechnologiesWithVulnerabilitiesInPeriodForCountry.put(entry.getKey(),
                     amountOfVulnerableTechnologies);
         }
+
+        long endTime = System.currentTimeMillis();
+
+        System.out.println("Processing the data takes: " + (endTime - startTime) / 60000 + " mins.");
 
         return amountOftechnologiesWithVulnerabilitiesInPeriodForCountry;
     }

@@ -68,8 +68,6 @@ public class QueryBuilderTest {
                 resultQueryForEachMonth.put(YearMonth.parse("2020_08", formatter),
                                 "SELECT DISTINCT * FROM `httparchive.technologies." + "2020_08_01_desktop"
                                                 + "` where url like '%." + "de"
-                                                + "/' AND info !='' union DISTINCT SELECT DISTINCT * FROM `httparchive.technologies."
-                                                + "2020_08_15_desktop" + "` where url like '%." + "de"
                                                 + "/' AND info !=''");
                 assertTrue(resultQueryForEachMonth.equals(
                                 queryBuilder.getTechnologiesInPeriodForCountryQuery("2020_08", "2020_08", "de")));

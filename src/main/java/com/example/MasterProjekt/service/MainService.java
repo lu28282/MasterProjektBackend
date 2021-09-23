@@ -60,7 +60,7 @@ public class MainService {
             SoftwareAndVersion softwareAndVersionWithPossibleVul = vulnerabilityService
                     .setVulnerabilityForSoftwareAndVersionIfPresent(softwareAndVersion,
                             allVulnerabilitiesForEverySoftware);
-            if (softwareAndVersionWithPossibleVul.getVulnerabilities().size() > 0) {
+            if (softwareAndVersionWithPossibleVul != null) {
                 vulnerableSoftwaresAndVersionsSet.add(softwareAndVersionWithPossibleVul);
             }
         }

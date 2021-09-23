@@ -8,6 +8,7 @@ import com.google.cloud.bigquery.JobException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,9 +26,13 @@ public class MainController {
         System.out.println("Hello World!");
     }
 
-    @GetMapping("/test1")
-    private Map<YearMonth, Integer> getAllVulnerabilitesInPeriodForCountry() throws JobException, InterruptedException {
-        return mainService.getAmountOfAllVulnerabilitiesForCountryCodeAndIntervall("2016_01", "2017_01", "com");
+    @GetMapping("/technologies")
+    private Map<YearMonth, Integer> getAllVulnerabilitesInPeriodForCountry(@RequestParam String startDate,
+            @RequestParam String endDate, @RequestParam String countryCode) throws JobException, InterruptedException {
+        // return
+        // mainService.getAmountOfAllVulnerabilitiesForCountryCodeAndIntervall("2016_01",
+        // "2017_01", "com");
+        return mainService.getAmountOfAllVulnerabilitiesForCountryCodeAndIntervall(startDate, endDate, countryCode);
     }
 
 }

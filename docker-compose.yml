@@ -1,0 +1,11 @@
+version: "3"
+services:
+  db:
+    container_name: "PostgresDB"
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=masterProject
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=test123

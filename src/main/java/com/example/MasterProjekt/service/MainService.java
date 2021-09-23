@@ -10,7 +10,7 @@ import java.util.Set;
 
 import com.example.MasterProjekt.model.Vulnerability;
 import com.example.MasterProjekt.pojo.SoftwareAndVersion;
-import com.example.MasterProjekt.pojo.Technologie;
+import com.example.MasterProjekt.pojo.Technology;
 import com.google.cloud.bigquery.JobException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +29,13 @@ public class MainService {
         this.vulnerabilityService = vulnerabilityService;
     }
 
-    public Map<YearMonth, List<Technologie>> getAllVulnerabilitiesForCountryCodeAndIntervall(String startDate,
+    public Map<YearMonth, List<Technology>> getAllVulnerabilitiesForCountryCodeAndIntervall(String startDate,
             String endDate, String countryCode) throws JobException, InterruptedException {
         long startTimeBQ = System.currentTimeMillis();
-        Map<YearMonth, List<Technologie>> technologiesInPeriodForCountry = bigQueryService
+        Map<YearMonth, List<Technology>> technologiesInPeriodForCountry = bigQueryService
                 .getTechnologiesInPeriodForCountry(startDate, endDate, countryCode);
-        System.out.println("BigQueryPart finished");
         long endTimeBQ = System.currentTimeMillis();
+        System.out.println("BigQueryPart finished");
         System.out.println("Big Query query took: " + (endTimeBQ - startTimeBQ) / 60000 + " mins.");
 
         long startTimeProcessing = System.currentTimeMillis();
@@ -43,8 +43,8 @@ public class MainService {
         Set<String> allSoftwares = new HashSet<String>();
 
         // get all software and versions from every Technologie
-        for (List<Technologie> techlist : technologiesInPeriodForCountry.values()) {
-            for (Technologie tech : techlist) {
+        for (List<Technology> techlist : technologiesInPeriodForCountry.values()) {
+            for (Technology tech : techlist) {
                 allSoftwares.add(tech.getSoftwareAndVersion().getSoftware().toLowerCase());
                 allSoftwaresAndVersions.add(tech.getSoftwareAndVersion());
             }
@@ -65,17 +65,20 @@ public class MainService {
             }
         }
 
+        // create new Map<YearMonth, List<Technology>> containing vulnerable
+        // technologies
         List<SoftwareAndVersion> vulnerableSoftwaresAndVersionsList = new ArrayList<>(
                 vulnerableSoftwaresAndVersionsSet);
-        Map<YearMonth, List<Technologie>> vulnearbleTechnologiesInPeriodForCountry = new HashMap<YearMonth, List<Technologie>>();
-        for (var entry : technologiesInPeriodForCountry.entrySet()) {
-            List<Technologie> vulTechs = new ArrayList<Technologie>();
+        Map<YearMonth, List<Technology>> vulnearbleTechnologiesInPeriodForCountry = new HashMap<YearMonth, List<Technology>>();
 
-            for (Technologie tech : entry.getValue()) {
+        for (var entry : technologiesInPeriodForCountry.entrySet()) {
+            List<Technology> vulTechs = new ArrayList<Technology>();
+
+            for (Technology tech : entry.getValue()) {
                 SoftwareAndVersion softwareAndVersion = tech.getSoftwareAndVersion();
                 if (vulnerableSoftwaresAndVersionsList.contains(softwareAndVersion)) {
                     int index = vulnerableSoftwaresAndVersionsList.indexOf(softwareAndVersion);
-                    Technologie vulTechnologie = tech;
+                    Technology vulTechnologie = tech;
                     vulTechnologie.setSoftwareAndVersion(vulnerableSoftwaresAndVersionsList.get(index));
                     vulTechs.add(vulTechnologie);
                 }
@@ -86,7 +89,6 @@ public class MainService {
         }
 
         long endTimeProcessing = System.currentTimeMillis();
-
         System.out.println("Processing took: " + (endTimeProcessing - startTimeProcessing) / 1000 + " secs.");
 
         return vulnearbleTechnologiesInPeriodForCountry;
@@ -96,7 +98,7 @@ public class MainService {
             String endDate, String countryCode) throws JobException, InterruptedException {
         long startTime = System.currentTimeMillis();
 
-        Map<YearMonth, List<Technologie>> technologiesWithVulnerabilitiesInPeriodForCountry = getAllVulnerabilitiesForCountryCodeAndIntervall(
+        Map<YearMonth, List<Technology>> technologiesWithVulnerabilitiesInPeriodForCountry = getAllVulnerabilitiesForCountryCodeAndIntervall(
                 startDate, endDate, countryCode);
         Map<YearMonth, Integer> amountOftechnologiesWithVulnerabilitiesInPeriodForCountry = new HashMap<YearMonth, Integer>();
 
@@ -109,7 +111,6 @@ public class MainService {
         }
 
         long endTime = System.currentTimeMillis();
-
         System.out.println("The whole process took: " + (endTime - startTime) / 60000 + " mins.");
 
         return amountOftechnologiesWithVulnerabilitiesInPeriodForCountry;

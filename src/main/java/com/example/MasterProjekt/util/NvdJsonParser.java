@@ -76,7 +76,7 @@ public class NvdJsonParser {
             pDate = format.parse(publishedDate);
             lmDate = format.parse(lastModifiedDate);
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
+            System.out.println("If this exception is thrown, the frontend is providing the wrong date Format. Stacktrace below");
             e.printStackTrace();
         }
 

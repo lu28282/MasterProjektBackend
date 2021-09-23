@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.NonNull;
 
 @Data
-public class Technologie {
+public class Technology {
 
     @NonNull
     private String url;

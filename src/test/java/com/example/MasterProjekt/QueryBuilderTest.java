@@ -56,7 +56,7 @@ public class QueryBuilderTest {
                                                 + "2017_03_15_desktop" + "` where url like '%." + "de"
                                                 + "/' AND info !=''");
                 assertTrue(resultQueryForEachMonth.equals(
-                                queryBuilder.getVulnerabilitiesInPeriodForCountryQuery("2016_10", "2017_03", "de")));
+                                queryBuilder.getTechnologiesInPeriodForCountryQuery("2016_10", "2017_03", "de")));
         }
 
         @Test
@@ -72,7 +72,7 @@ public class QueryBuilderTest {
                                                 + "2020_08_15_desktop" + "` where url like '%." + "de"
                                                 + "/' AND info !=''");
                 assertTrue(resultQueryForEachMonth.equals(
-                                queryBuilder.getVulnerabilitiesInPeriodForCountryQuery("2020_08", "2020_08", "de")));
+                                queryBuilder.getTechnologiesInPeriodForCountryQuery("2020_08", "2020_08", "de")));
         }
 
         @Test
@@ -80,6 +80,6 @@ public class QueryBuilderTest {
                 QueryBuilder queryBuilder = new QueryBuilder();
                 Map<YearMonth, String> emptyResultMap = new HashMap<YearMonth, String>();
                 assertTrue(emptyResultMap.equals(
-                                queryBuilder.getVulnerabilitiesInPeriodForCountryQuery("2020_10", "2020_08", "de")));
+                                queryBuilder.getTechnologiesInPeriodForCountryQuery("2020_10", "2020_08", "de")));
         }
 }

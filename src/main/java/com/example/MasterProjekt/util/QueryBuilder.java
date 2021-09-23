@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class QueryBuilder {
 
-    public Map<YearMonth, String> getVulnerabilitiesInPeriodForCountryQuery(String startDate, String endDate,
+    public Map<YearMonth, String> getTechnologiesInPeriodForCountryQuery(String startDate, String endDate,
             String countryCode) {
         Map<YearMonth, String> queryForEachMonth = new HashMap<YearMonth, String>();
 

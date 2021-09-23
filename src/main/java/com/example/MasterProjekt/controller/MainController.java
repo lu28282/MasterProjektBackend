@@ -1,11 +1,8 @@
 package com.example.MasterProjekt.controller;
 
 import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Map;
 
-import com.example.MasterProjekt.model.Vulnerability;
 import com.example.MasterProjekt.service.MainService;
 import com.google.cloud.bigquery.JobException;
 
@@ -23,19 +20,6 @@ public class MainController {
         this.mainService = mainService;
     }
 
-    // @Autowired
-    // BigQueryService bigQueryService;
-
-    // @GetMapping("/getGoogle")
-    // private String getGoogle() throws Exception {
-    // List<Technologie> techlist = bigQueryService.exampleQuery();
-    // techlist.stream().forEach(tech -> System.out.println(tech.toString()));
-
-    // ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-    // String json = ow.writeValueAsString(techlist);
-    // return json;
-    // }
-
     @GetMapping("/test")
     private void test() {
         System.out.println("Hello World!");
@@ -46,13 +30,4 @@ public class MainController {
         return mainService.getAmountOfAllVulnerabilitiesForCountryCodeAndIntervall("2016_01", "2018_03", "com");
     }
 
-    // @GetMapping("/testCountryQuery")
-    // private void test2() throws JobException, InterruptedException {
-    // Map<YearMonth, Integer> technologiesInPeriodForCountry = bigQueryService
-    // .getTechnologiesInPeriodForCountry("2016_12", "2016_12", "de");
-
-    // technologiesInPeriodForCountry.entrySet().stream()
-    // .forEach(x -> System.out.println(x.getKey().toString().replace("-", "_") + ":
-    // " + x.getValue()));
-    // }
 }

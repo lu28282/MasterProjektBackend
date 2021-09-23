@@ -27,7 +27,8 @@ public class QueryBuilder {
     }
 
     private Map<YearMonth, List<String>> generateMapOfMonthToQueryOver(String startDateString, String endDateString) {
-        // <Month of a Year, Month of a Year concatenated with _01_desktop and _15_desktop to match the BigQuery-table-names>
+        // <Month of a Year, Month of a Year concatenated with _01_desktop and
+        // _15_desktop to match the BigQuery-table-names>
         Map<YearMonth, List<String>> monthMap = new HashMap<YearMonth, List<String>>();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy_MM");
@@ -37,8 +38,12 @@ public class QueryBuilder {
         while (startDate.isBefore(endDate) || startDate.equals(endDate)) {
             List<String> twoDaysPerMonth = new ArrayList<String>();
 
-            twoDaysPerMonth.add(startDate.format(formatter) + "_01_desktop");
-            twoDaysPerMonth.add(startDate.format(formatter) + "_15_desktop");
+            if (isValidMonth(startDate)) {
+                twoDaysPerMonth.add(startDate.format(formatter) + "_01_desktop");
+                twoDaysPerMonth.add(startDate.format(formatter) + "_15_desktop");
+            } else {
+                twoDaysPerMonth.add(startDate.format(formatter) + "_01_desktop");
+            }
 
             monthMap.put(startDate, twoDaysPerMonth);
             startDate = startDate.plusMonths(1);
@@ -46,20 +51,48 @@ public class QueryBuilder {
         return monthMap;
     }
 
-    private Map<YearMonth, String> generateQueryForEachMonthInPeriodForCountry(Map<YearMonth, List<String>> monthMap, String countryCode) {
+    private Map<YearMonth, String> generateQueryForEachMonthInPeriodForCountry(Map<YearMonth, List<String>> monthMap,
+            String countryCode) {
         Map<YearMonth, String> queryForEachMonth = new HashMap<YearMonth, String>();
 
         for (var month : monthMap.entrySet()) {
-            String firstTimestamp = month.getValue().get(0);
-            String secondTimestamp = month.getValue().get(1);
+            List<String> twoDaysInMonth = month.getValue();
+            String query;
+            if (twoDaysInMonth.size() > 1) {
+                String firstTimestamp = twoDaysInMonth.get(0);
+                String secondTimestamp = twoDaysInMonth.get(1);
 
-            String query = "SELECT DISTINCT * FROM `httparchive.technologies." + firstTimestamp + "` where url like '%."
-                    + countryCode + "/' AND info !='' union DISTINCT SELECT DISTINCT * FROM `httparchive.technologies."
-                    + secondTimestamp + "` where url like '%." + countryCode + "/' AND info !=''";
+                query = "SELECT DISTINCT * FROM `httparchive.technologies." + firstTimestamp + "` where url like '%."
+                        + countryCode
+                        + "/' AND info !='' union DISTINCT SELECT DISTINCT * FROM `httparchive.technologies."
+                        + secondTimestamp + "` where url like '%." + countryCode + "/' AND info !=''";
+            } else {
+                String firstTimestamp = twoDaysInMonth.get(0);
+
+                query = "SELECT DISTINCT * FROM `httparchive.technologies." + firstTimestamp + "` where url like '%."
+                        + countryCode + "/' AND info !=''";
+            }
 
             queryForEachMonth.put(month.getKey(), query);
         }
         return queryForEachMonth;
+    }
+
+    /**
+     * For the month 2018_05 and every month after 2018_12 there is only a single
+     * technology table in the BigQuery DB. Every Date before that has two. One on
+     * the first one on the 15th.
+     */
+    private boolean isValidMonth(YearMonth currentDate) {
+        boolean isValid = true;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy_MM");
+
+        if (currentDate.compareTo(YearMonth.parse("2018_05", formatter)) == 0
+                || currentDate.isAfter(YearMonth.parse("2018_12", formatter))) {
+            isValid = false;
+        }
+
+        return isValid;
     }
 
 }

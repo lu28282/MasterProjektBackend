@@ -26,7 +26,7 @@ Danach sollte alles laufen.
 
 # Requests
 
-Die Route für die Requests könnt ihr im Maincontroller finden. Ist aber soweit ich weiß ``` localhost:8080/technologies?startDate=2016_01&endDate=2016_01&countyCode=com```
+Die Route für die Requests könnt ihr im Maincontroller finden. Ist aber soweit ich weiß ``` localhost:8080/technologies?startDate=2016_01&endDate=2016_01&countryCode=com```
 
 Viel Spaß
 

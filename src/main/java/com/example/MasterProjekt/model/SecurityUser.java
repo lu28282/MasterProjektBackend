@@ -12,9 +12,9 @@ import lombok.Data;
 @Data
 public class SecurityUser implements UserDetails {
 
-    private final Userr user;
+    private final Nutzer user;
 
-    public SecurityUser(Userr user) {
+    public SecurityUser(Nutzer user) {
         this.user = user;
     }
 

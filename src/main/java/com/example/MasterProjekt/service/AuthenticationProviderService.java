@@ -1,10 +1,6 @@
 package com.example.MasterProjekt.service;
 
-import java.util.List;
-
-import com.example.MasterProjekt.model.Authority;
 import com.example.MasterProjekt.model.SecurityUser;
-import com.example.MasterProjekt.model.Userr;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -32,14 +28,6 @@ public class AuthenticationProviderService implements AuthenticationProvider {
         SecurityUser user = userDetailsService.loadUserByUsername(username);
         
         return checkPassword(user, password);
-    }
-
-    public void createUser(String name, String password, List<Authority> authorities) {
-        Userr user = new Userr();
-        user.setUsername(name);
-        user.setPassword(bCryptPasswordEncoder.encode(password));
-        user.setAuthorities(authorities);
-        userDetailsService.createUser(new SecurityUser(user)); 
     }
 
     @Override

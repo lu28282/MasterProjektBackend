@@ -1,14 +1,12 @@
 package com.example.MasterProjekt.repository;
 
-import java.util.Optional;
-
-import com.example.MasterProjekt.model.Userr;
+import com.example.MasterProjekt.model.Nutzer;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<Userr, Long> {
+public interface UserRepository extends JpaRepository<Nutzer, Long> {
     
-    Optional<Userr> findUserByUsername(String username);
+    Nutzer findUserrByUsername(String username);
 }

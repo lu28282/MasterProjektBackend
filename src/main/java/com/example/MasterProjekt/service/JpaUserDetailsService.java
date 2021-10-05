@@ -1,9 +1,7 @@
 package com.example.MasterProjekt.service;
 
-import java.util.function.Supplier;
-
 import com.example.MasterProjekt.model.SecurityUser;
-import com.example.MasterProjekt.model.Userr;
+import com.example.MasterProjekt.model.Nutzer;
 import com.example.MasterProjekt.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +18,13 @@ public class JpaUserDetailsService implements UserDetailsManager {
 
     @Override
     public SecurityUser loadUserByUsername(String username) throws UsernameNotFoundException {
-        Supplier<UsernameNotFoundException> s = () -> new UsernameNotFoundException("Problem during authentication!");
+        Nutzer user = userRepository.findUserrByUsername(username);
 
-        Userr u = userRepository.findUserByUsername(username).orElseThrow(s);
+        if(user == null) {
+            throw new UsernameNotFoundException("Problem during authentication!");
+        }
 
-        return new SecurityUser(u);
+        return new SecurityUser(user);
     }
 
     @Override
@@ -34,11 +34,7 @@ public class JpaUserDetailsService implements UserDetailsManager {
 
     @Override
     public void createUser(UserDetails userDetails) {
-        Userr user = new Userr();
-        user.setUsername(userDetails.getUsername());
-        user.setPassword(userDetails.getPassword());
-        user.setAuthorities(user.getAuthorities());
-        userRepository.save(user);
+        // functionality has to be implemented if needed
     }
 
     @Override

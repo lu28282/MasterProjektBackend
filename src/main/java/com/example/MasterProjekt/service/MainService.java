@@ -32,6 +32,7 @@ public class MainService {
 
     public Map<YearMonth, List<Technology>> getAllVulnerabilitiesForCountryCodeAndIntervall(String startDate,
             String endDate, String countryCode) throws JobException, InterruptedException {
+
         long startTimeBQ = System.currentTimeMillis();
         Map<YearMonth, List<Technology>> technologiesInPeriodForCountry = bigQueryService
                 .getTechnologiesInPeriodForCountry(startDate, endDate, countryCode);
@@ -40,7 +41,6 @@ public class MainService {
         System.out.println("Big Query query took: " + (endTimeBQ - startTimeBQ) / 1000 + " secs.");
 
         long startTimeProcessing = System.currentTimeMillis();
-
         Set<SoftwareAndVersion> allSoftwaresAndVersions = new HashSet<SoftwareAndVersion>();
         Set<String> allSoftwares = new HashSet<String>();
 
@@ -71,7 +71,7 @@ public class MainService {
         // technologies
         List<SoftwareAndVersion> vulnerableSoftwaresAndVersionsList = new ArrayList<>(
                 vulnerableSoftwaresAndVersionsSet);
-        Map<YearMonth, List<Technology>> vulnearbleTechnologiesInPeriodForCountry = new TreeMap<YearMonth, List<Technology>>();
+        Map<YearMonth, List<Technology>> vulnerableTechnologiesInPeriodForCountry = new TreeMap<YearMonth, List<Technology>>();
 
         for (var entry : technologiesInPeriodForCountry.entrySet()) {
             List<Technology> vulTechs = new ArrayList<Technology>();
@@ -86,14 +86,14 @@ public class MainService {
                 }
             }
 
-            vulnearbleTechnologiesInPeriodForCountry.put(entry.getKey(), vulTechs);
+            vulnerableTechnologiesInPeriodForCountry.put(entry.getKey(), vulTechs);
 
         }
 
         long endTimeProcessing = System.currentTimeMillis();
         System.out.println("Processing took: " + (endTimeProcessing - startTimeProcessing) / 1000 + " secs.");
 
-        return vulnearbleTechnologiesInPeriodForCountry;
+        return vulnerableTechnologiesInPeriodForCountry;
     }
 
     public Map<YearMonth, Integer> getAmountOfAllVulnerabilitiesForCountryCodeAndIntervall(String startDate,
@@ -102,15 +102,9 @@ public class MainService {
 
         Map<YearMonth, List<Technology>> technologiesWithVulnerabilitiesInPeriodForCountry = getAllVulnerabilitiesForCountryCodeAndIntervall(
                 startDate, endDate, countryCode);
-        Map<YearMonth, Integer> amountOftechnologiesWithVulnerabilitiesInPeriodForCountry = new HashMap<YearMonth, Integer>();
 
-        for (var entry : technologiesWithVulnerabilitiesInPeriodForCountry.entrySet()) {
-            int amountOfVulnerableTechnologies = 0;
-            amountOfVulnerableTechnologies = entry.getValue().size();
-
-            amountOftechnologiesWithVulnerabilitiesInPeriodForCountry.put(entry.getKey(),
-                    amountOfVulnerableTechnologies);
-        }
+        Map<YearMonth, Integer> amountOftechnologiesWithVulnerabilitiesInPeriodForCountry = countAmountOfVulnerabilitiesInPeriod(
+                technologiesWithVulnerabilitiesInPeriodForCountry);
 
         long endTime = System.currentTimeMillis();
         System.out.println("The whole process took: " + (endTime - startTime) / 60000 + " mins.");
@@ -129,7 +123,6 @@ public class MainService {
         System.out.println("Big Query query took: " + (endTimeBQ - startTimeBQ) / 1000 + " secs.");
 
         long startTimeProcessing = System.currentTimeMillis();
-
         Set<SoftwareAndVersion> allSoftwaresAndVersions = new HashSet<SoftwareAndVersion>();
         Set<String> allSoftwares = new HashSet<String>();
 
@@ -191,18 +184,27 @@ public class MainService {
         Map<YearMonth, List<Technology>> technologiesWithCWEInPerioid = getAllVulnerabilitiesForCWEAndIntervall(
                 startDate, endDate, cwe);
 
-        Map<YearMonth, Integer> amountOftechnologiesWithVulnerabilitiesInPeriod = new HashMap<YearMonth, Integer>();
-
-        for (var entry : technologiesWithCWEInPerioid.entrySet()) {
-            int amountOfVulnerableTechnologies = 0;
-            amountOfVulnerableTechnologies = entry.getValue().size();
-
-            amountOftechnologiesWithVulnerabilitiesInPeriod.put(entry.getKey(), amountOfVulnerableTechnologies);
-        }
+        Map<YearMonth, Integer> amountOfTechnologiesWithVulnerabilitiesInPeriod = countAmountOfVulnerabilitiesInPeriod(
+                technologiesWithCWEInPerioid);
 
         long endTime = System.currentTimeMillis();
         System.out.println("The whole process took: " + (endTime - startTime) / 60000 + " mins.");
 
-        return amountOftechnologiesWithVulnerabilitiesInPeriod;
+        return amountOfTechnologiesWithVulnerabilitiesInPeriod;
+    }
+
+    private Map<YearMonth, Integer> countAmountOfVulnerabilitiesInPeriod(
+            Map<YearMonth, List<Technology>> vulnerableTechnologiesInPeriod) {
+
+        Map<YearMonth, Integer> amountOfTechnologiesWithVulnerabilitiesInPeriod = new TreeMap<YearMonth, Integer>();
+
+        for (var entry : vulnerableTechnologiesInPeriod.entrySet()) {
+            int amountOfVulnerableTechnologies = 0;
+            amountOfVulnerableTechnologies = entry.getValue().size();
+
+            amountOfTechnologiesWithVulnerabilitiesInPeriod.put(entry.getKey(), amountOfVulnerableTechnologies);
+        }
+
+        return amountOfTechnologiesWithVulnerabilitiesInPeriod;
     }
 }

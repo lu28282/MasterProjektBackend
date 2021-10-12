@@ -34,4 +34,10 @@ public class MainController {
         return mainService.getAmountOfAllVulnerabilitiesForCountryCodeAndIntervall(startDate, endDate, countryCode);
     }
 
+    @GetMapping("/CWE")
+    private Map<YearMonth, Integer> getAllVulnerabilitiesInPerioidForCEW(@RequestParam String startDate,
+            @RequestParam String endDate, @RequestParam String cwe) throws JobException, InterruptedException {
+        return mainService.getAmountOfAllVulnerabilitiesForCWEAndIntervall(startDate, endDate, cwe);
+    }
+
 }

@@ -86,6 +86,16 @@ public class BigQueryService {
         return technologiesForEachMonth;
     }
 
+    public Map<YearMonth, List<Technology>> getTechnologiesInPeriod(String startDate, String endDate)
+            throws JobException, InterruptedException {
+
+        Map<YearMonth, String> querys = queryBuilder.getTechnologiesInPeriod(startDate, endDate);
+
+        Map<YearMonth, List<Technology>> technologiesForEachMonth = executeAndProcessQueryPeriodForCountry(querys);
+
+        return technologiesForEachMonth;
+    }
+
     private Map<YearMonth, List<Technology>> executeAndProcessQueryPeriodForCountry(Map<YearMonth, String> querys)
             throws JobException, InterruptedException {
         Map<YearMonth, List<Technology>> technologiesForEachMonth = new HashMap<YearMonth, List<Technology>>();

@@ -20,8 +20,15 @@ public class QueryBuilder {
 
         queryForEachMonth = generateQueryForEachMonthInPeriodForCountry(monthMap, countryCode);
 
-        // queryForEachMonth.entrySet().forEach(x -> System.out.println(x.getKey() + ":
-        // " + x.getValue()));
+        return queryForEachMonth;
+    }
+
+    public Map<YearMonth, String> getTechnologiesInPeriod(String startDate, String endDate) {
+        Map<YearMonth, String> queryForEachMonth = new HashMap<YearMonth, String>();
+
+        Map<YearMonth, List<String>> monthMap = generateMapOfMonthToQueryOver(startDate, endDate);
+
+        queryForEachMonth = generateQueryForEachMonthInPeriod(monthMap);
 
         return queryForEachMonth;
     }
@@ -71,6 +78,30 @@ public class QueryBuilder {
 
                 query = "SELECT DISTINCT * FROM `httparchive.technologies." + firstTimestamp + "` where url like '%."
                         + countryCode + "/' AND info !=''";
+            }
+
+            queryForEachMonth.put(month.getKey(), query);
+        }
+        return queryForEachMonth;
+    }
+
+    private Map<YearMonth, String> generateQueryForEachMonthInPeriod(Map<YearMonth, List<String>> monthMap) {
+        Map<YearMonth, String> queryForEachMonth = new HashMap<YearMonth, String>();
+
+        for (var month : monthMap.entrySet()) {
+            List<String> twoDaysInMonth = month.getValue();
+            String query;
+            if (twoDaysInMonth.size() > 1) {
+                String firstTimestamp = twoDaysInMonth.get(0);
+                String secondTimestamp = twoDaysInMonth.get(1);
+
+                query = "SELECT DISTINCT * FROM `httparchive.technologies." + firstTimestamp + "` where info !=''"
+                        + " union DISTINCT SELECT DISTINCT * FROM `httparchive.technologies." + secondTimestamp
+                        + "` where info !=''";
+            } else {
+                String firstTimestamp = twoDaysInMonth.get(0);
+
+                query = "SELECT DISTINCT * FROM `httparchive.technologies." + firstTimestamp + "` where info !=''";
             }
 
             queryForEachMonth.put(month.getKey(), query);

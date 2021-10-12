@@ -37,4 +37,10 @@ public class AdminController {
             @RequestParam String endDate, @RequestParam String countryCode) throws JobException, InterruptedException {
         return mainService.getAllVulnerabilitiesForCountryCodeAndIntervall(startDate, endDate, countryCode);
     }
+
+    @GetMapping("/CWE")
+    private Map<YearMonth, List<Technology>> getAllVulnerabilitiesInPerioidForCEW(@RequestParam String startDate,
+            @RequestParam String endDate, @RequestParam String cwe) throws JobException, InterruptedException {
+        return mainService.getAllVulnerabilitiesForCWEAndIntervall(startDate, endDate, cwe);
+    }
 }

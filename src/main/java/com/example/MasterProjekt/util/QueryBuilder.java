@@ -69,15 +69,24 @@ public class QueryBuilder {
                 String firstTimestamp = twoDaysInMonth.get(0);
                 String secondTimestamp = twoDaysInMonth.get(1);
 
-                query = "SELECT DISTINCT * FROM `httparchive.technologies." + firstTimestamp + "` where url like '%."
+                query = "SELECT DISTINCT * FROM `httparchive.technologies." 
+                        + firstTimestamp 
+                        + "` where url like '%."
                         + countryCode
-                        + "/' AND info !='' union DISTINCT SELECT DISTINCT * FROM `httparchive.technologies."
-                        + secondTimestamp + "` where url like '%." + countryCode + "/' AND info !=''";
+                        + "/' AND info !='' AND regexp_contains(info, '([0-9]+[.]*)+') AND NOT regexp_contains(info, '[a-zA-Z][a-zA-Z]+')"
+                        + " union DISTINCT SELECT DISTINCT * FROM `httparchive.technologies."
+                        + secondTimestamp 
+                        + "` where url like '%." 
+                        + countryCode 
+                        + "/' AND info !='' AND regexp_contains(info, '([0-9]+[.]*)+') AND NOT regexp_contains(info, '[a-zA-Z][a-zA-Z]+')";
             } else {
                 String firstTimestamp = twoDaysInMonth.get(0);
 
-                query = "SELECT DISTINCT * FROM `httparchive.technologies." + firstTimestamp + "` where url like '%."
-                        + countryCode + "/' AND info !=''";
+                query = "SELECT DISTINCT * FROM `httparchive.technologies." 
+                        + firstTimestamp 
+                        + "` where url like '%."
+                        + countryCode 
+                        + "/' AND info !='' AND regexp_contains(info, '([0-9]+[.]*)+') AND NOT regexp_contains(info, '[a-zA-Z][a-zA-Z]+')";
             }
 
             queryForEachMonth.put(month.getKey(), query);
@@ -95,13 +104,18 @@ public class QueryBuilder {
                 String firstTimestamp = twoDaysInMonth.get(0);
                 String secondTimestamp = twoDaysInMonth.get(1);
 
-                query = "SELECT DISTINCT * FROM `httparchive.technologies." + firstTimestamp + "` where info !=''"
-                        + " union DISTINCT SELECT DISTINCT * FROM `httparchive.technologies." + secondTimestamp
-                        + "` where info !=''";
+                query = "SELECT DISTINCT * FROM `httparchive.technologies." 
+                        + firstTimestamp 
+                        + "` where info !='' AND regexp_contains(info, '([0-9]+[.]*)+') AND NOT regexp_contains(info, '[a-zA-Z][a-zA-Z]+')"
+                        + " union DISTINCT SELECT DISTINCT * FROM `httparchive.technologies." 
+                        + secondTimestamp
+                        + "` where info !='' AND regexp_contains(info, '([0-9]+[.]*)+') AND NOT regexp_contains(info, '[a-zA-Z][a-zA-Z]+')";
             } else {
                 String firstTimestamp = twoDaysInMonth.get(0);
 
-                query = "SELECT DISTINCT * FROM `httparchive.technologies." + firstTimestamp + "` where info !=''";
+                query = "SELECT DISTINCT * FROM `httparchive.technologies." 
+                        + firstTimestamp 
+                        + "` where info !='' AND regexp_contains(info, '([0-9]+[.]*)+') AND NOT regexp_contains(info, '[a-zA-Z][a-zA-Z]+')";
             }
 
             queryForEachMonth.put(month.getKey(), query);

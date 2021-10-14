@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.List;
 
 import com.example.MasterProjekt.service.MainService;
+import com.example.MasterProjekt.util.ScoreType;
 import com.example.MasterProjekt.pojo.Technology;
 import com.google.cloud.bigquery.JobException;
 
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/admin")
 @CrossOrigin
 public class AdminController {
-    
+
     MainService mainService;
 
     @Autowired
@@ -42,5 +43,21 @@ public class AdminController {
     private Map<YearMonth, List<Technology>> getAllVulnerabilitiesInPerioidForCEW(@RequestParam String startDate,
             @RequestParam String endDate, @RequestParam String cwe) throws JobException, InterruptedException {
         return mainService.getAllVulnerabilitiesForCWEAndIntervall(startDate, endDate, cwe);
+    }
+
+    @GetMapping("/impactScore")
+    private Map<YearMonth, List<Technology>> getAllVulnerabilitiesInPeriodWithMatchingImpactScore(
+            @RequestParam String startDate, @RequestParam String endDate, @RequestParam Double lowerLimit,
+            @RequestParam Double upperLimit) throws JobException, InterruptedException {
+        return mainService.getAllVulnerabilitiesInPeriodForMatchingScore(startDate, endDate, lowerLimit, upperLimit,
+                ScoreType.IMPACT);
+    }
+
+    @GetMapping("/exploitabilityScore")
+    private Map<YearMonth, List<Technology>> getAllVulnerabilitiesInPeriodWithMatchingExploitabilityScore(
+            @RequestParam String startDate, @RequestParam String endDate, @RequestParam Double lowerLimit,
+            @RequestParam Double upperLimit) throws JobException, InterruptedException {
+        return mainService.getAllVulnerabilitiesInPeriodForMatchingScore(startDate, endDate, lowerLimit, upperLimit,
+                ScoreType.EXPLOITABILITY);
     }
 }

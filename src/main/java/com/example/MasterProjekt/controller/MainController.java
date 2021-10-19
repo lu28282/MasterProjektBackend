@@ -25,8 +25,10 @@ public class MainController {
     }
 
     @GetMapping("/test")
-    private void test() {
+    private String test() {
+        String s = "Successful test!";
         System.out.println("Hello World!");
+        return s;
     }
 
     @GetMapping("/technologies")

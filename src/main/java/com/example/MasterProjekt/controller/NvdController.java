@@ -21,7 +21,7 @@ public class NvdController {
     NvdJsonParser nvdJsonParser;
 
     @GetMapping("/parseNVDToDatabase")
-    public void test2() throws InterruptedException, FileNotFoundException {
+    public void parseNVDToDatabase() throws InterruptedException, FileNotFoundException {
         File jsonDirectory = ResourceUtils.getFile("classpath:nvdJsons");
         File[] jsonDirListing = jsonDirectory.listFiles();
         for (File json : jsonDirListing) {

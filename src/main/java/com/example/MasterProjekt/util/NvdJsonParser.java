@@ -62,7 +62,7 @@ public class NvdJsonParser {
                 "Finished " + numberOfJsonFilesCompleted + " of " + totalNumberOfJsonFiles + " files in total!");
     }
 
-    private boolean cveToVulnerabilityToDatabase(String id, List<String> problemtypeList, Set<Cpe> cpeSet,
+    private boolean cveToVulnerabilityDatabase(String id, List<String> problemtypeList, Set<Cpe> cpeSet,
             BaseMetricV2 baseMetricV2, BaseMetricV3 baseMetricV3, String publishedDate, String lastModifiedDate) {
         boolean addedVulnerabilitySuccesfully = true;
         Vulnerability vulnerability;
@@ -76,7 +76,8 @@ public class NvdJsonParser {
             pDate = format.parse(publishedDate);
             lmDate = format.parse(lastModifiedDate);
         } catch (ParseException e) {
-            System.out.println("If this exception is thrown, the frontend is providing the wrong date Format. Stacktrace below");
+            System.out.println(
+                    "If this exception is thrown, the frontend is providing the wrong date Format. Stacktrace below");
             e.printStackTrace();
         }
 
@@ -109,7 +110,7 @@ public class NvdJsonParser {
         String publishedDate = cveItems.get("publishedDate").asText();
         String lastModifiedDate = cveItems.get("lastModifiedDate").asText();
 
-        cveToVulnerabilityToDatabase(id, problemtypeList, cpeSet, baseMetricV2, baseMetricV3, publishedDate,
+        cveToVulnerabilityDatabase(id, problemtypeList, cpeSet, baseMetricV2, baseMetricV3, publishedDate,
                 lastModifiedDate);
     }
 

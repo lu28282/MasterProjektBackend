@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import com.example.MasterProjekt.model.Vulnerability;
+import com.example.MasterProjekt.pojo.AmountPerMonth;
 import com.example.MasterProjekt.pojo.SoftwareAndVersion;
 import com.example.MasterProjekt.pojo.Technology;
 import com.example.MasterProjekt.util.ScoreType;
@@ -96,14 +98,14 @@ public class MainService {
         return vulnerableTechnologiesInPeriodForCountry;
     }
 
-    public Map<YearMonth, Long> getAmountOfAllVulnerabilitiesForCountryCodeAndIntervall(String startDate,
-            String endDate, String countryCode) throws JobException, InterruptedException {
+    public Set<AmountPerMonth> getAmountOfAllVulnerabilitiesForCountryCodeAndIntervall(String startDate, String endDate,
+            String countryCode) throws JobException, InterruptedException {
         long startTime = System.currentTimeMillis();
 
         Map<YearMonth, List<Technology>> technologiesWithVulnerabilitiesInPeriodForCountry = getAllVulnerabilitiesForCountryCodeAndIntervall(
                 startDate, endDate, countryCode);
 
-        Map<YearMonth, Long> amountOftechnologiesWithVulnerabilitiesInPeriodForCountry = countAmountOfVulnerabilitiesInPeriod(
+        Set<AmountPerMonth> amountOftechnologiesWithVulnerabilitiesInPeriodForCountry = countAmountOfVulnerabilitiesInPeriod(
                 technologiesWithVulnerabilitiesInPeriodForCountry);
 
         long endTime = System.currentTimeMillis();
@@ -176,7 +178,7 @@ public class MainService {
         return vulnearbleTechnologiesInPeriod;
     }
 
-    public Map<YearMonth, Long> getAmountOfAllVulnerabilitiesForCWEAndIntervall(String startDate, String endDate,
+    public Set<AmountPerMonth> getAmountOfAllVulnerabilitiesForCWEAndIntervall(String startDate, String endDate,
             String cwe) throws JobException, InterruptedException {
 
         long startTime = System.currentTimeMillis();
@@ -184,7 +186,7 @@ public class MainService {
         Map<YearMonth, List<Technology>> technologiesWithCWEInPerioid = getAllVulnerabilitiesForCWEAndIntervall(
                 startDate, endDate, cwe);
 
-        Map<YearMonth, Long> amountOfTechnologiesWithVulnerabilitiesInPeriod = countAmountOfVulnerabilitiesInPeriod(
+        Set<AmountPerMonth> amountOfTechnologiesWithVulnerabilitiesInPeriod = countAmountOfVulnerabilitiesInPeriod(
                 technologiesWithCWEInPerioid);
 
         long endTime = System.currentTimeMillis();
@@ -266,14 +268,14 @@ public class MainService {
         return vulnearbleTechnologiesInPeriod;
     }
 
-    public Map<YearMonth, Long> getAmountAllVulnerabilitiesInPeriodForMatchingScore(String startDate, String endDate,
+    public Set<AmountPerMonth> getAmountAllVulnerabilitiesInPeriodForMatchingScore(String startDate, String endDate,
             Double lowerLimit, Double upperLimit, ScoreType score) throws JobException, InterruptedException {
         long startTime = System.currentTimeMillis();
 
         Map<YearMonth, List<Technology>> technologiesWithCWEInPerioid = getAllVulnerabilitiesInPeriodForMatchingScore(
                 startDate, endDate, lowerLimit, upperLimit, score);
 
-        Map<YearMonth, Long> amountOfTechnologiesWithVulnerabilitiesInPeriod = countAmountOfVulnerabilitiesInPeriod(
+        Set<AmountPerMonth> amountOfTechnologiesWithVulnerabilitiesInPeriod = countAmountOfVulnerabilitiesInPeriod(
                 technologiesWithCWEInPerioid);
 
         long endTime = System.currentTimeMillis();
@@ -282,16 +284,17 @@ public class MainService {
         return amountOfTechnologiesWithVulnerabilitiesInPeriod;
     }
 
-    private Map<YearMonth, Long> countAmountOfVulnerabilitiesInPeriod(
+    private Set<AmountPerMonth> countAmountOfVulnerabilitiesInPeriod(
             Map<YearMonth, List<Technology>> vulnerableTechnologiesInPeriod) {
 
-        Map<YearMonth, Long> amountOfTechnologiesWithVulnerabilitiesInPeriod = new TreeMap<YearMonth, Long>();
+        Set<AmountPerMonth> amountOfTechnologiesWithVulnerabilitiesInPeriod = new TreeSet<AmountPerMonth>();
 
         for (var entry : vulnerableTechnologiesInPeriod.entrySet()) {
             long amountOfVulnerableTechnologies = 0;
             amountOfVulnerableTechnologies = entry.getValue().size();
 
-            amountOfTechnologiesWithVulnerabilitiesInPeriod.put(entry.getKey(), amountOfVulnerableTechnologies);
+            AmountPerMonth amountPerMonth = new AmountPerMonth(entry.getKey(), amountOfVulnerableTechnologies);
+            amountOfTechnologiesWithVulnerabilitiesInPeriod.add(amountPerMonth);
         }
 
         return amountOfTechnologiesWithVulnerabilitiesInPeriod;

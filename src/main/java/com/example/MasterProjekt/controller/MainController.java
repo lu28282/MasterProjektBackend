@@ -1,8 +1,8 @@
 package com.example.MasterProjekt.controller;
 
-import java.time.YearMonth;
-import java.util.Map;
+import java.util.Set;
 
+import com.example.MasterProjekt.pojo.AmountPerMonth;
 import com.example.MasterProjekt.service.MainService;
 import com.example.MasterProjekt.util.ScoreType;
 import com.google.cloud.bigquery.JobException;
@@ -32,19 +32,19 @@ public class MainController {
     }
 
     @GetMapping("/technologies")
-    private Map<YearMonth, Long> getAllVulnerabilitesInPeriodForCountry(@RequestParam String startDate,
+    private Set<AmountPerMonth> getAllVulnerabilitesInPeriodForCountry(@RequestParam String startDate,
             @RequestParam String endDate, @RequestParam String countryCode) throws JobException, InterruptedException {
         return mainService.getAmountOfAllVulnerabilitiesForCountryCodeAndIntervall(startDate, endDate, countryCode);
     }
 
     @GetMapping("/CWE")
-    private Map<YearMonth, Long> getAllVulnerabilitiesInPerioidForCEW(@RequestParam String startDate,
+    private Set<AmountPerMonth> getAllVulnerabilitiesInPerioidForCEW(@RequestParam String startDate,
             @RequestParam String endDate, @RequestParam String cwe) throws JobException, InterruptedException {
         return mainService.getAmountOfAllVulnerabilitiesForCWEAndIntervall(startDate, endDate, cwe);
     }
 
     @GetMapping("/impactScore")
-    private Map<YearMonth, Long> getAllVulnerabilitiesInPeriodWithMatchingImpactScore(@RequestParam String startDate,
+    private Set<AmountPerMonth> getAllVulnerabilitiesInPeriodWithMatchingImpactScore(@RequestParam String startDate,
             @RequestParam String endDate, @RequestParam Double lowerLimit, @RequestParam Double upperLimit)
             throws JobException, InterruptedException {
         return mainService.getAmountAllVulnerabilitiesInPeriodForMatchingScore(startDate, endDate, lowerLimit,
@@ -52,7 +52,7 @@ public class MainController {
     }
 
     @GetMapping("/exploitabilityScore")
-    private Map<YearMonth, Long> getAllVulnerabilitiesInPeriodWithMatchingExploitabilityScore(
+    private Set<AmountPerMonth> getAllVulnerabilitiesInPeriodWithMatchingExploitabilityScore(
             @RequestParam String startDate, @RequestParam String endDate, @RequestParam Double lowerLimit,
             @RequestParam Double upperLimit) throws JobException, InterruptedException {
         return mainService.getAmountAllVulnerabilitiesInPeriodForMatchingScore(startDate, endDate, lowerLimit,

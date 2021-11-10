@@ -48,32 +48,32 @@ public class BigQueryService {
                 .build().getService();
     }
 
-    public List<Technology> exampleQuery() throws InterruptedException {
-        QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(
-                "SELECT * FROM `httparchive.technologies.2016_01_01_desktop` where url like '%.com/' AND info != '' limit 10")
-                .setUseLegacySql(false).build();
+    // public List<Technology> exampleQuery() throws InterruptedException {
+    //     QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(
+    //             "SELECT * FROM `httparchive.technologies.2016_01_01_desktop` where url like '%.com/' AND info != '' limit 10")
+    //             .setUseLegacySql(false).build();
 
-        // Create a job ID so that we can safely retry.
-        JobId jobId = JobId.of(UUID.randomUUID().toString());
-        Job queryJob = bigQuery.create(JobInfo.newBuilder(queryConfig).setJobId(jobId).build());
+    //     // Create a job ID so that we can safely retry.
+    //     JobId jobId = JobId.of(UUID.randomUUID().toString());
+    //     Job queryJob = bigQuery.create(JobInfo.newBuilder(queryConfig).setJobId(jobId).build());
 
-        // Wait for the query to complete.
-        queryJob = queryJob.waitFor();
+    //     // Wait for the query to complete.
+    //     queryJob = queryJob.waitFor();
 
-        // Check for errors
-        if (queryJob == null) {
-            throw new RuntimeException("Job no longer exists");
-        } else if (queryJob.getStatus().getError() != null) {
-            // You can also look at queryJob.getStatus().getExecutionErrors() for all
-            // errors, not just the latest one.
-            throw new RuntimeException(queryJob.getStatus().getError().toString());
-        }
+    //     // Check for errors
+    //     if (queryJob == null) {
+    //         throw new RuntimeException("Job no longer exists");
+    //     } else if (queryJob.getStatus().getError() != null) {
+    //         // You can also look at queryJob.getStatus().getExecutionErrors() for all
+    //         // errors, not just the latest one.
+    //         throw new RuntimeException(queryJob.getStatus().getError().toString());
+    //     }
 
-        // Get the results.
-        TableResult tableResult = queryJob.getQueryResults();
+    //     // Get the results.
+    //     TableResult tableResult = queryJob.getQueryResults();
 
-        return tableResultToTechnologieList(tableResult);
-    }
+    //     return tableResultToTechnologieList(tableResult);
+    // }
 
     public Map<YearMonth, List<Technology>> getTechnologiesInPeriodForCountry(String startDate, String endDate,
             String countryCode) throws JobException, InterruptedException {

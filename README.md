@@ -106,7 +106,7 @@ Als nächstes muss pgAdmin4 installiert werden.
     - Beispielquery: `localhost:8080/exploitabilityScore?startDate=2016_01&endDate=2016_02&lowerLimit=1.4&upperLimit=3.0`
     - Returned die Anzahl an verwundbaren Webseiten für einen Zeitraum und den angegebenen exploitabilityScore Score.
 - `localhost:8080/admin/exploitabilityScore?startDate=jjjj_mm&endDate=jjjj_mm&lowerLimit=nn.nn&upperLimit=nn.nn`
-    - Beispielquery: `localhost:8080/admin/exploitabilityScore?startDate=2016_01&endDate=2016_02&lowerLimit=1.4&upperLimit=3.0`
+    - Beispielquery: `localhost:8080/admin/exploitabilityScore?startDate=2016_01&endDate=2016_02&lowerLimit=1.4&upperLimit=4.0`
     - Returned die verwundbaren Webseiten für einen Zeitraum und den angegebenen exploitabilityScore Score.
 
 Viel Spaß

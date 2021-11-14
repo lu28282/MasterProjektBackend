@@ -85,10 +85,10 @@ Als nächstes muss pgAdmin4 installiert werden.
 
 # Endpunkte und Requests
 - `localhost:8080/technologies?startDate=jjjj_mm&endDate=jjjj_mm&countryCode=xxx`
-    - Beispielquery: `localhost:8080/technologies?startDate=2016_01&endDate=2016_01&countryCode=com`
+    - Beispielquery: `localhost:8080/technologies?startDate=2016_01&endDate=2016_05&countryCode=com`
     - Returned die Anzahl an verwundbaren Webseiten für ein Land in einem Zeitraum.
 - `localhost:8080/admin/technologies?startDate=jjjj_mm&endDate=jjjj_mm&countryCode=xxx`
-    - Beispielquery: `localhost:8080/admin/technologies?startDate=2016_01&endDate=2016_01&countryCode=com`
+    - Beispielquery: `localhost:8080/admin/technologies?startDate=2016_01&endDate=2016_05&countryCode=com`
     - Returned die verwundbaren Webseiten für ein Land in einem Zeitraum.
 - `localhost:8080/CWE?startDate=jjjj_mm&endDate=jjjj_mm&cwe=CWE-nn`
     - Beispielquery: `localhost:8080/CWE?startDate=2016_01&endDate=2016_01&cwe=CWE-20`
